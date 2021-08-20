@@ -1,5 +1,4 @@
 const message = process.argv.slice(2);
-console.log('message: ', message[0]);
 
 const crypto = require("crypto");
 const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
@@ -20,7 +19,7 @@ const privateKeyout = privateKey.export({
 console.log(privateKeyout);
 
 const data = message[0];
-
+console.log('message: ', data);
 const encryptedData = crypto.publicEncrypt({
     key: publicKey,
     padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
@@ -28,4 +27,13 @@ const encryptedData = crypto.publicEncrypt({
   },
   Buffer.from(data)
 );
-console.log("encypted data: ", encryptedData.toString("base64"));
+console.log("Encypted data: ", encryptedData.toString("base64"));
+
+const dencryptedData = crypto.privateDecrypt({
+    key: privateKey,
+    padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+    oaepHash: "sha256",
+  },
+  encryptedData
+);
+console.log("Dencypted data: ", dencryptedData.toString());
